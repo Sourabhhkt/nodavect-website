@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nodavect | Optimization for Infrastructure Planning</title>
+  <meta name="description"
+        content="Nodavect develops optimization-based decision support for produced-water infrastructure planning, helping teams compare network investments, routing strategies, and operating scenarios.">
+
+  <style>
+    :root {
+      --navy: #0b1f33;
+      --navy-2: #123653;
+      --blue: #16678f;
+      --teal: #1c8a8a;
+      --ink: #162433;
+      --muted: #5d6b79;
+      --line: #dce4ea;
+      --soft: #f5f8fa;
+      --soft-blue: #eef5f8;
+      --white: #ffffff;
+      --shadow: 0 18px 50px rgba(11, 31, 51, 0.10);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(220, 228, 234, 0.85);
+    }
+
+    nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      color: var(--navy);
+    }
+
+    .brand span {
+      color: var(--teal);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-size: 0.95rem;
+      color: #425363;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--navy);
+    }
+
+    .nav-cta {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--navy);
+      color: var(--white) !important;
+      font-weight: 700;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 83% 17%, rgba(28, 138, 138, 0.13), transparent 28%),
+        radial-gradient(circle at 64% 40%, rgba(22, 103, 143, 0.10), transparent 34%),
+        linear-gradient(180deg, #ffffff 0%, #f8fbfc 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      min-height: 620px;
+      padding: 92px 0 80px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 62px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 11px;
+      margin-bottom: 22px;
+      border: 1px solid #c9dbe4;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.8);
+      color: var(--blue);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 5px rgba(28, 138, 138, 0.10);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      color: var(--navy);
+      font-size: clamp(2.8rem, 5.5vw, 5.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 28px 0 0;
+      font-size: 1.19rem;
+      color: #4c5e6f;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 19px;
+      border-radius: 10px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: 0 10px 25px rgba(11,31,51,0.16);
+    }
+
+    .button-primary:hover {
+      background: var(--navy-2);
+    }
+
+    .button-secondary {
+      border: 1px solid #bdccd5;
+      background: rgba(255,255,255,0.85);
+      color: var(--navy);
+    }
+
+    .hero-note {
+      margin-top: 20px;
+      color: #6f7e8c;
+      font-size: 0.91rem;
+    }
+
+    /* Hero illustration */
+    .network-card {
+      position: relative;
+      min-height: 430px;
+      border-radius: 26px;
+      background: linear-gradient(145deg, #0b1f33 0%, #123653 62%, #14556d 100%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .network-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    .network-label {
+      position: absolute;
+      left: 24px;
+      top: 22px;
+      color: rgba(255,255,255,0.74);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+    }
+
+    .network-card svg {
+      position: absolute;
+      width: 92%;
+      height: 82%;
+      left: 4%;
+      bottom: 2%;
+    }
+
+    .mini-metric {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      width: 190px;
+      padding: 14px 15px;
+      border: 1px solid rgba(255,255,255,0.17);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.09);
+      backdrop-filter: blur(10px);
+      color: white;
+    }
+
+    .mini-metric strong {
+      display: block;
+      font-size: 0.93rem;
+      margin-bottom: 3px;
+    }
+
+    .mini-metric span {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.79rem;
+      line-height: 1.45;
+      display: block;
+    }
+
+    /* Credibility strip */
+    .credibility {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cred-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cred-item {
+      padding: 26px 28px;
+      border-right: 1px solid var(--line);
+    }
+
+    .cred-item:first-child {
+      padding-left: 0;
+    }
+
+    .cred-item:last-child {
+      border-right: 0;
+    }
+
+    .cred-kicker {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .cred-item strong {
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    /* Sections */
+    section {
+      padding: 96px 0;
+    }
+
+    .section-soft {
+      background: var(--soft);
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 44px;
+    }
+
+    .section-head .kicker {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-size: 0.78rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 17px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: 0 8px 24px rgba(11,31,51,0.035);
+    }
+
+    .card-number {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .card h3 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    /* Split */
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 31px;
+      border-radius: 22px;
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .panel h3 {
+      margin: 0 0 16px;
+      font-size: 1.35rem;
+    }
+
+    .panel p {
+      color: rgba(255,255,255,0.76);
+      margin: 0;
+    }
+
+    .check-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0;
+    }
+
+    .check-list li {
+      position: relative;
+      padding: 12px 0 12px 30px;
+      border-top: 1px solid rgba(255,255,255,0.13);
+      color: rgba(255,255,255,0.88);
+    }
+
+    .check-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 2px;
+      color: #72d6cd;
+      font-weight: 900;
+    }
+
+    .plain-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .plain-item {
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .plain-item:last-child {
+      border-bottom: 0;
+    }
+
+    .plain-item strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--navy);
+      font-size: 1.03rem;
+    }
+
+    .plain-item span {
+      color: var(--muted);
+    }
+
+    /* Pilot */
+    .pilot {
+      background:
+        radial-gradient(circle at 92% 18%, rgba(28,138,138,0.17), transparent 23%),
+        linear-gradient(135deg, #0b1f33, #123653);
+      color: var(--white);
+    }
+
+    .pilot .section-head h2,
+    .pilot .section-head .kicker {
+      color: var(--white);
+    }
+
+    .pilot .section-head p {
+      color: rgba(255,255,255,0.72);
+    }
+
+    .pilot-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 26px;
+    }
+
+    .pilot-box {
+      padding: 29px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .pilot-box h3 {
+      margin: 0 0 14px;
+      font-size: 1.18rem;
+    }
+
+    .pilot-box p,
+    .pilot-box li {
+      color: rgba(255,255,255,0.76);
+    }
+
+    .pilot-box ul {
+      margin: 15px 0 0;
+      padding-left: 19px;
+    }
+
+    .pilot-box li {
+      margin: 8px 0;
+    }
+
+    /* Founder */
+    .founder-card {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: 0 10px 30px rgba(11,31,51,0.04);
+    }
+
+    .founder-monogram {
+      width: 150px;
+      height: 150px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(28,138,138,0.18), rgba(22,103,143,0.07)),
+        var(--soft-blue);
+      color: var(--navy);
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .founder-card h3 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 1.45rem;
+    }
+
+    .founder-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    /* Trust */
+    .trust-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .trust-item {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .trust-item h3 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 1.1rem;
+    }
+
+    .trust-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    /* Final CTA */
+    .cta {
+      padding: 84px 0;
+      text-align: center;
+      background: var(--soft-blue);
+      border-top: 1px solid #d6e6ec;
+    }
+
+    .cta h2 {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .cta p {
+      max-width: 680px;
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .cta .button {
+      margin-top: 28px;
+    }
+
+    footer {
+      background: #081826;
+      color: rgba(255,255,255,0.72);
+      padding: 32px 0;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .footer-brand {
+      color: white;
+      font-weight: 800;
+    }
+
+    @media (max-width: 880px) {
+      .nav-links a:not(.nav-cta) {
+        display: none;
+      }
+
+      .hero-grid,
+      .split,
+      .pilot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-grid {
+        padding-top: 68px;
+        gap: 42px;
+      }
+
+      .network-card {
+        min-height: 360px;
+      }
+
+      .cards,
+      .cred-grid,
+      .trust-box {
+        grid-template-columns: 1fr;
+      }
+
+      .cred-item {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 20px 0;
+      }
+
+      .cred-item:last-child {
+        border-bottom: 0;
+      }
+
+      .founder-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        width: min(100% - 28px, 1120px);
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      h1 {
+        font-size: 3rem;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
+      }
+
+      .network-card {
+        min-height: 310px;
+      }
+
+      .mini-metric {
+        width: 160px;
+      }
+
+      .founder-monogram {
+        width: 112px;
+        height: 112px;
+      }
+
+      .footer-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#top">Noda<span>vect</span></a>
+
+      <div class="nav-links">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#approach">Approach</a>
+        <a href="#pilot">Pilot</a>
+        <a href="#about">About</a>
+        <a class="nav-cta" href="mailto:sourabh.nodavect@gmail.com?subject=Nodavect%20Pilot%20Discussion">
+          Discuss a pilot
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+
+      <div>
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          Infrastructure decision support
+        </div>
+
+        <h1>Plan water infrastructure with better visibility into cost and tradeoffs.</h1>
+
+        <p>
+          Nodavect develops optimization-based decision support for produced-water infrastructure.
+          We help planning teams evaluate network investments, routing strategies, capacities,
+          and operating scenarios across interconnected systems.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button button-primary"
+             href="mailto:sourabh.nodavect@gmail.com?subject=Nodavect%20Pilot%20Discussion">
+            Discuss a planning case →
+          </a>
+
+          <a class="button button-secondary" href="#approach">
+            See how it works
+          </a>
+        </div>
+
+        <div class="hero-note">
+          Built for focused planning studies using real or historical infrastructure cases.
+        </div>
+      </div>
+
+      <div class="network-card" aria-label="Illustration of an interconnected water infrastructure network">
+        <div class="network-label">Illustrative network planning model</div>
+
+        <svg viewBox="0 0 620 420" role="img" aria-label="Network of water sources, pipelines, treatment and disposal facilities">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <g stroke="#6dbcc7" stroke-width="5" fill="none" opacity="0.74">
+            <path d="M80 245 C155 215, 205 155, 275 190"/>
+            <path d="M80 245 C175 280, 230 305, 320 300"/>
+            <path d="M275 190 C365 120, 420 115, 505 145"/>
+            <path d="M275 190 C365 215, 400 240, 490 255"/>
+            <path d="M320 300 C375 290, 420 275, 490 255"/>
+            <path d="M505 145 C535 185, 540 215, 490 255"/>
+          </g>
+
+          <g fill="#d8f3f1" stroke="#ffffff" stroke-width="3" filter="url(#glow)">
+            <circle cx="80" cy="245" r="15"/>
+            <circle cx="275" cy="190" r="18"/>
+            <circle cx="320" cy="300" r="14"/>
+            <circle cx="505" cy="145" r="17"/>
+            <circle cx="490" cy="255" r="19"/>
+          </g>
+
+          <g font-family="Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.80)">
+            <text x="42" y="281">Production</text>
+            <text x="242" y="160">Storage</text>
+            <text x="289" y="335">Reuse</text>
+            <text x="475" y="112">Treatment</text>
+            <text x="461" y="294">Disposal</text>
+          </g>
+
+          <g stroke="#ffffff" stroke-width="2" fill="#1c8a8a">
+            <circle cx="172" cy="216" r="6"/>
+            <circle cx="392" cy="151" r="6"/>
+            <circle cx="407" cy="228" r="6"/>
+            <circle cx="227" cy="284" r="6"/>
+          </g>
+        </svg>
+
+        <div class="mini-metric">
+          <strong>Scenario-driven planning</strong>
+          <span>Compare infrastructure choices and operating strategies before capital is committed.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="credibility">
+    <div class="wrap cred-grid">
+      <div class="cred-item">
+        <span class="cred-kicker">Built on</span>
+        <strong>Mathematical optimization</strong>
+      </div>
+      <div class="cred-item">
+        <span class="cred-kicker">Initial focus</span>
+        <strong>Produced-water infrastructure</strong>
+      </div>
+      <div class="cred-item">
+        <span class="cred-kicker">Founder background</span>
+        <strong>Georgia Tech PhD in Operations Research</strong>
+      </div>
+    </div>
+  </div>
+
+  <section id="capabilities">
+    <div class="wrap">
+
+      <div class="section-head">
+        <div class="kicker">Planning challenge</div>
+        <h2>Infrastructure decisions are interconnected.</h2>
+        <p>
+          Pipeline additions, facility capacities, disposal access, treatment options, storage,
+          and routing decisions affect one another. Nodavect is designed to evaluate these
+          tradeoffs together rather than one asset at a time.
+        </p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-number">01</div>
+          <h3>Infrastructure selection</h3>
+          <p>
+            Compare candidate pipelines, capacities, connections, and facility investments
+            against system-wide operating implications.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">02</div>
+          <h3>Flow & routing strategy</h3>
+          <p>
+            Evaluate how produced water can move through existing and candidate infrastructure
+            while respecting capacities and operating constraints.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">03</div>
+          <h3>Scenario comparison</h3>
+          <p>
+            Test alternative forecasts, cost assumptions, infrastructure options, and operating
+            conditions before committing to a plan.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="approach" class="section-soft">
+    <div class="wrap split">
+
+      <div class="panel">
+        <h3>From planning data to a defensible recommendation</h3>
+        <p>
+          A focused Nodavect study can begin with the planning information teams already use.
+        </p>
+
+        <ul class="check-list">
+          <li>Projected water volumes</li>
+          <li>Existing network topology</li>
+          <li>Candidate pipelines and facilities</li>
+          <li>Capacities and operating limits</li>
+          <li>Capital and operating cost assumptions</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-head" style="margin-bottom: 28px;">
+          <div class="kicker">Approach</div>
+          <h2>Optimization as a decision-support layer.</h2>
+          <p>
+            The goal is not to replace planners. It is to give them a rigorous way to test more
+            combinations, quantify tradeoffs, and compare a recommended plan with the current
+            planning baseline.
+          </p>
+        </div>
+
+        <div class="plain-list">
+          <div class="plain-item">
+            <strong>1. Encode the planning case</strong>
+            <span>Represent the network, alternatives, costs, capacities, and operating constraints.</span>
+          </div>
+
+          <div class="plain-item">
+            <strong>2. Evaluate feasible alternatives</strong>
+            <span>Use optimization to search across infrastructure and routing decisions jointly.</span>
+          </div>
+
+          <div class="plain-item">
+            <strong>3. Compare against the baseline</strong>
+            <span>Summarize recommended investments, operating flows, and cost differences in planner-friendly outputs.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="pilot" class="pilot">
+    <div class="wrap">
+
+      <div class="section-head">
+        <div class="kicker">Pilot projects</div>
+        <h2>Pressure-test the model on a real planning case.</h2>
+        <p>
+          Nodavect is seeking focused pilot opportunities where an operator or infrastructure
+          planner has a network expansion, routing, or capacity decision that can be evaluated
+          against an existing plan or historical case.
+        </p>
+      </div>
+
+      <div class="pilot-grid">
+
+        <div class="pilot-box">
+          <h3>A pilot can help answer questions such as:</h3>
+          <ul>
+            <li>Which candidate connections or pipelines are worth building?</li>
+            <li>Where could additional treatment, storage, or disposal capacity create value?</li>
+            <li>How should water be routed across the network under projected volumes?</li>
+            <li>How sensitive is the recommended plan to assumptions or forecast changes?</li>
+          </ul>
+        </div>
+
+        <div class="pilot-box">
+          <h3>Typical output</h3>
+          <ul>
+            <li>Recommended infrastructure decisions</li>
+            <li>Illustrative flow allocation across the network</li>
+            <li>Capital and operating cost comparison</li>
+            <li>Scenario and sensitivity discussion</li>
+            <li>Clear comparison with the customer's current planning baseline</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+
+      <div class="section-head">
+        <div class="kicker">About Nodavect</div>
+        <h2>Research depth, applied to infrastructure decisions.</h2>
+      </div>
+
+      <div class="founder-card">
+        <div class="founder-monogram">SC</div>
+
+        <div>
+          <h3>Sourabh Choudhary, PhD — Founder</h3>
+          <p>
+            Sourabh holds a PhD in Operations Research from the Georgia Institute of Technology,
+            where his research focused on optimization methods for water-network design and operation.
+            His work combines mathematical modeling, optimization algorithms, and practical
+            decision-support tools for complex infrastructure and industrial systems.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section-soft">
+    <div class="wrap">
+
+      <div class="section-head">
+        <div class="kicker">Trust & confidentiality</div>
+        <h2>Start with a bounded case and clear data expectations.</h2>
+        <p>
+          Early pilot work should be structured so that the customer knows what information is
+          needed, what will be produced, and how project data will be handled.
+        </p>
+      </div>
+
+      <div class="trust-box">
+        <div class="trust-item">
+          <h3>Confidential customer data</h3>
+          <p>
+            Project-specific confidentiality and data-handling terms can be established before
+            any sensitive information is transferred.
+          </p>
+        </div>
+
+        <div class="trust-item">
+          <h3>Focused scope</h3>
+          <p>
+            Pilots can begin with a bounded planning case, including sanitized or historical data
+            where appropriate, before expanding to a broader deployment.
+          </p>
+        </div>
+
+        <div class="trust-item">
+          <h3>Transparent assumptions</h3>
+          <p>
+            Model inputs, planning assumptions, infrastructure alternatives, and cost drivers are
+            made explicit so recommendations can be reviewed by the planning team.
+          </p>
+        </div>
+
+        <div class="trust-item">
+          <h3>Decision support, not a black box</h3>
+          <p>
+            Outputs are intended to support engineering and planning judgment with a quantitative
+            comparison of alternatives, rather than replace it.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Have a produced-water planning case worth evaluating?</h2>
+      <p>
+        A historical project, upcoming expansion, or network-capacity question can be a useful
+        starting point for a focused discussion.
+      </p>
+
+      <a class="button button-primary"
+         href="mailto:sourabh.nodavect@gmail.com?subject=Nodavect%20Planning%20Case">
+        Contact Nodavect →
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>
+      <span class="footer-brand">Nodavect</span>
+      <span> · Optimization for infrastructure planning</span>
+    </div>
+
+    <div>© 2026 Nodavect. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
